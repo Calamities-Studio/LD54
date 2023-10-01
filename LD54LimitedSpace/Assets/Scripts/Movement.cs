@@ -27,6 +27,10 @@ public class Movement : MonoBehaviour
             velocity = Camera.main.ScreenToWorldPoint(mousePosition) - transform.position;
             Debug.Log(velocity);
         }
+        else if (mouse.press.wasReleasedThisFrame)
+        {
+            velocity = Vector2.zero;
+        }
         
         gameObject.transform.position += (Vector3)velocity * Time.deltaTime;
     }
