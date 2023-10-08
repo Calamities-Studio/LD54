@@ -52,12 +52,27 @@ public class Movement : MonoBehaviour
         }
         #endregion
 
-        gameObject.transform.position += (Vector3)velocity * Time.deltaTime;
+        Vector3 newPlayerPosition = transform.position + (Vector3)velocity * Time.deltaTime;
+
+        if (!CheckIfPlayerWouldBeOutOfBoundaries(newPlayerPosition))
+            transform.position = newPlayerPosition;
     }
 
     private void SetVelocityFromScreenPosition(Vector2 screenPosition)
     {
         velocity = Camera.main.ScreenToWorldPoint(screenPosition) - transform.position;
         velocity = Vector2.ClampMagnitude(velocity, 1f) * speed;
+    }
+
+    private bool CheckIfPlayerWouldBeOutOfBoundaries(Vector2 newPosition)
+    {
+        Vector2 playerHalfSize = transform.localScale;
+        Vector2 outOfBounds = new(8.88f - playerHalfSize.x / 2, 5f - playerHalfSize.y / 2);
+
+        if (newPosition.x > outOfBounds.x || newPosition.x < -outOfBounds.x ||
+            newPosition.y > outOfBounds.y || newPosition.y < -outOfBounds.y)
+            return true;
+        else
+            return false;
     }
 }
