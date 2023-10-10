@@ -52,10 +52,19 @@ public class Movement : MonoBehaviour
         }
         #endregion
 
-        Vector3 newPlayerPosition = transform.position + (Vector3)velocity * Time.deltaTime;
+        Vector2 newPlayerPosition = (Vector2)transform.position + velocity * Time.deltaTime;
 
-        if (!CheckIfPlayerWouldBeOutOfBoundaries(newPlayerPosition))
+        if (velocity != Vector2.zero && !CheckIfPlayerWouldBeOutOfBoundaries(newPlayerPosition))
             transform.position = newPlayerPosition;
+        else
+        {
+            Vector2 preferredDirection = Mathf.Abs(velocity.x) > Mathf.Abs(velocity.y) ? new(velocity.x, 0f) : new(0f, velocity.y);
+
+            newPlayerPosition = (Vector2)transform.position + preferredDirection * Time.deltaTime;
+
+            if (!CheckIfPlayerWouldBeOutOfBoundaries(newPlayerPosition))
+                transform.position = newPlayerPosition;
+        }
     }
 
     private void SetVelocityFromScreenPosition(Vector2 screenPosition)
